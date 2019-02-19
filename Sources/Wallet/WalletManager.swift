@@ -161,7 +161,7 @@ public struct WalletManager {
     let changeKey: BTCKey
     let privateKeys: [BTCKey]
 
-    if wallet.imTokenMeta.source == .wif {
+    if wallet.metadata.walletFrom == .wif {
       let wif = try wallet.privateKey(password: password)
       changeKey = BTCKey(wif: wif)
       privateKeys = Array(repeating: changeKey, count: outputs.count)
@@ -193,16 +193,16 @@ public struct WalletManager {
   public static func switchBTCWalletMode(walletID: String, password: String, segWit: SegWit) throws -> BasicWallet {
      let wallet = try findWalletByWalletID(walletID)
 
-    if wallet.imTokenMeta.chain != .btc {
+    if wallet.metadata.chain != .btc {
       throw GenericError.operationUnsupported
     }
 
-    if wallet.imTokenMeta.segWit == segWit {
+    if wallet.metadata.segWit == segWit {
       return wallet
     }
 
     let newKeystore: Keystore
-    var metadata = wallet.imTokenMeta
+    var metadata = wallet.metadata
     metadata.segWit = segWit
     let path = BIP44.path(for: metadata.network, segWit: segWit)
 

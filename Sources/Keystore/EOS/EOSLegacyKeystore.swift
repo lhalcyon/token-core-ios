@@ -41,7 +41,7 @@ struct EOSLegacyKeystore: Keystore, WIFCrypto {
     if let metaJSON = json[WalletMeta.key] as? JSONObject {
       meta = try WalletMeta(json: metaJSON)
     } else {
-      meta = WalletMeta(chain: .btc, source: .keystore)
+      meta = WalletMeta(chain: .btc, from: .keystore)
     }
   }
 
@@ -64,7 +64,7 @@ struct EOSLegacyKeystore: Keystore, WIFCrypto {
       "id": id,
       "address": address,
       "createdAt": (Int)(meta.timestamp),
-      "source": meta.source.rawValue,
+      "from": meta.walletFrom!.rawValue,
       "chainType": meta.chain!.rawValue
     ]
   }

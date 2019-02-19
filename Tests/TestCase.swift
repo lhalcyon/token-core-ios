@@ -52,9 +52,7 @@ class TestCase: XCTestCase {
     BTCMnemonicKeystore.commonIv = "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC"
     StorageManager.storageType = InMemoryStorage.self
     storage = StorageManager.storageType.init()
-    var metadata = WalletMeta(source: .newIdentity)
-    metadata.name = "xyz"
-    metadata.passwordHint = TestData.passwordHint
+    var metadata = WalletMeta(from: .mnemonic)
     metadata.network = .mainnet
     _ = try! Identity.createIdentity(password: TestData.password, metadata: metadata)
   }

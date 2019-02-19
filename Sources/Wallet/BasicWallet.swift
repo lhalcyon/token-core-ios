@@ -20,25 +20,23 @@ public class BasicWallet {
       guard
         let version = json["version"] as? Int,
         let meta = json[WalletMeta.key] as? JSONObject,
-        let chainTypeStr = meta["chain"] as? String,
+        let chainTypeStr = meta["chainType"] as? String,
         let chainType = ChainType(rawValue: chainTypeStr),
-        let sourceStr = meta["source"] as? String,
-        let source = WalletMeta.Source(rawValue: sourceStr)
+        let fromStr = meta["from"] as? String,
+        let from = WalletFrom(rawValue: fromStr)
       else {
         throw KeystoreError.invalid
       }
 
-      let mnemonicKeystoreSource: [WalletMeta.Source] = [
+      let mnemonicKeystoreSource: [WalletFrom] = [
         .mnemonic,
-        .newIdentity,
-        .recoveredIdentity
       ]
 
       switch version {
       case 3:
         switch chainType {
         case .eth:
-          if mnemonicKeystoreSource.contains(source) {
+          if mnemonicKeystoreSource.contains(from) {
             self.keystore = try ETHMnemonicKeystore(json: json)
           } else {
             self.keystore = try ETHKeystore(json: json)
@@ -72,12 +70,13 @@ public class BasicWallet {
     return keystore.address
   }
 
-  public var imTokenMeta: WalletMeta {
+  public var metadata: WalletMeta {
     return keystore.meta
   }
 }
 
 public extension BasicWallet {
+  
   func exportMnemonic(password: String) throws -> String {
     guard let mnemonicKeystore = self.keystore as? EncMnemonicKeystore else {
       throw GenericError.operationUnsupported
@@ -125,13 +124,6 @@ public extension BasicWallet {
     } else {
       throw GenericError.operationUnsupported
     }
-  }
-
-  func delete() -> Bool {
-    guard let identity = Identity.currentIdentity else {
-      return false
-    }
-    return identity.removeWallet(self)
   }
 
   func verifyPassword(_ password: String) -> Bool {

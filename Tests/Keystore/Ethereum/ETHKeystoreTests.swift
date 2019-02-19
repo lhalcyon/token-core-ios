@@ -11,7 +11,7 @@ import XCTest
 
 class ETHKeystoreTests: TestCase {
   func testImportPrivateKey() {
-    let meta = WalletMeta(chain: .eth, source: .privateKey)
+    let meta = WalletMeta(chain: .eth, from: .privateKey)
     let keystore = try? ETHKeystore(password: TestData.password, privateKey: TestData.privateKey, metadata: meta)
     XCTAssertNotNil(keystore)
     XCTAssertEqual("6031564e7b2f5cc33737807b2e58daff870b590b", keystore?.address)
@@ -22,13 +22,13 @@ class ETHKeystoreTests: TestCase {
     let json = try! JSONSerialization.jsonObject(with: data) as! JSONObject
     let keystore = try? ETHKeystore(json: json)
     XCTAssertNotNil(keystore)
-    XCTAssertEqual(keystore!.meta.source, WalletMeta.Source.keystore)
+    XCTAssertEqual(keystore!.meta.walletFrom, WalletFrom.keystore)
   }
   
   func testValidKeystore() {
     do {
       let invalidKeystoreFiles = Bundle(for: ETHKeystoreTests.self).paths(forResourcesOfType: "json", inDirectory: "invalid_keystores")
-      let meta = WalletMeta(chain: .eth, source: .keystore)
+      let meta = WalletMeta(chain: .eth, from: .keystore)
       for case let filePath in invalidKeystoreFiles {
         let json = try String(contentsOfFile: filePath).tk_toJSON()
         let err = json["err"] as! String
@@ -69,7 +69,7 @@ class ETHKeystoreTests: TestCase {
     "version": 3
 }
 """
-      let meta = WalletMeta(chain: .eth, source: .keystore)
+      let meta = WalletMeta(chain: .eth, from: .keystore)
       let json = try! invalidKeystore.tk_toJSON()
       do {
       _ = try WalletManager.importFromKeystore(json, encryptedBy: "22222222", metadata: meta)

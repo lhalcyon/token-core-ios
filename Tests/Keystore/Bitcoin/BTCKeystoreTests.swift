@@ -11,21 +11,21 @@ import XCTest
 
 class BTCKeystoreTests: TestCase {
   func testImportWithPrivateKey() {
-    let meta = WalletMeta(chain: .btc, source: .wif, network: .mainnet)
+    let meta = WalletMeta(chain: .btc, from: .wif, network: .mainnet)
     let keystore = try? BTCKeystore(password: TestData.password, wif: TestData.wif, metadata: meta)
     XCTAssertNotNil(keystore)
     XCTAssertEqual("1N3RC53vbaDNrziTdWmctBEeQ4fo4quNpq", keystore?.address)
   }
 
   func testImportWithPrivateKeyTestnet() {
-    let meta = WalletMeta(chain: .btc, source: .wif, network: .testnet)
+    let meta = WalletMeta(chain: .btc, from: .wif, network: .testnet)
     let keystore = try? BTCKeystore(password: TestData.password, wif: TestData.wifTestnet, metadata: meta)
     XCTAssertNotNil(keystore)
     XCTAssertEqual("mgpHw67hvPxe8qQbtVZ8a7kHzn8U2v3ihF", keystore?.address)
   }
 
   func testImportFailureWithInvaidPrivateKey() {
-    let meta = WalletMeta(chain: .btc, source: .wif)
+    let meta = WalletMeta(chain: .btc, from: .wif)
     XCTAssertThrowsError(try BTCKeystore(password: TestData.password, wif: TestData.privateKey, metadata: meta))
   }
 
@@ -34,14 +34,14 @@ class BTCKeystoreTests: TestCase {
     let json = try! JSONSerialization.jsonObject(with: data) as! JSONObject
     let keystore = try? BTCKeystore(json: json)
     XCTAssertNotNil(keystore)
-    XCTAssertEqual(keystore!.meta.source, WalletMeta.Source.wif)
+    XCTAssertEqual(keystore!.meta.walletFrom, WalletFrom.wif)
   }
 }
 
 // SegWit
 extension BTCKeystoreTests {
   func testImportWithPrivateKeySegWit() {
-    var meta = WalletMeta(chain: .btc, source: .wif, network: .testnet)
+    var meta = WalletMeta(chain: .btc, from: .wif, network: .testnet)
     meta.segWit = .p2wpkh
     let keystore = try? BTCKeystore(password: TestData.password, wif: TestData.wifTestnet, metadata: meta)
     XCTAssertNotNil(keystore)

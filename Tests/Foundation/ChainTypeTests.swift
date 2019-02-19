@@ -10,9 +10,9 @@ import XCTest
 @testable import TokenCore
 
 class ChainTypeTests: XCTestCase {
-  func testPrivateKeySource() {
-    XCTAssertEqual(ChainType.eth.privateKeySource, WalletMeta.Source.privateKey)
-    XCTAssertEqual(ChainType.btc.privateKeySource, WalletMeta.Source.wif)
-    XCTAssertEqual(ChainType.eos.privateKeySource, WalletMeta.Source.wif)
-  }
+    func testPrivateKeySource() {
+        XCTAssertEqual(ChainType.eth.privateKeyFrom, WalletFrom.privateKey)
+        XCTAssertEqual(ChainType.btc.privateKeyFrom, WalletFrom.wif)
+        XCTAssertEqual(ChainType.eos.privateKeyFrom, WalletFrom.wif)
+    }
 }

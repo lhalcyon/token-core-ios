@@ -49,7 +49,7 @@ struct ETHMnemonicKeystore: ExportableKeystore, EncMnemonicKeystore, PrivateKeyC
     if let metaJSON = json[WalletMeta.key] as? JSONObject {
       meta = try WalletMeta(json: metaJSON)
     } else {
-      meta = WalletMeta(chain: .eth, source: .keystore)
+      meta = WalletMeta(chain: .eth, from: .keystore)
     }
   }
 
@@ -66,7 +66,7 @@ struct ETHMnemonicKeystore: ExportableKeystore, EncMnemonicKeystore, PrivateKeyC
       "id": id,
       "address": address,
       "createdAt": (Int)(meta.timestamp),
-      "source": meta.source.rawValue,
+      "from": meta.walletFrom!.rawValue,
       "chainType": meta.chain!.rawValue
     ]
   }

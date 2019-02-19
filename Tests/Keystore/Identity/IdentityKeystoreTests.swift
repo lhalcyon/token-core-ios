@@ -11,32 +11,32 @@ import XCTest
 
 class IdentityKeystoreTests: TestCase {
   func testInit() {
-    let meta = WalletMeta(source: .newIdentity)
+    let meta = WalletMeta(from: .mnemonic)
     let keystore = try? IdentityKeystore(metadata: meta, mnemonic: TestData.mnemonic, password: TestData.password)
     XCTAssertNotNil(keystore)
   }
 
   func testInitFailureWithInvalidMnemomic() {
-    let meta = WalletMeta(source: .newIdentity)
+    let meta = WalletMeta(from: .mnemonic)
     XCTAssertThrowsError(try IdentityKeystore(metadata: meta, mnemonic: "a bad phrase", password: TestData.password))
   }
 
   func testVerify() {
-    let meta = WalletMeta(source: .newIdentity)
+    let meta = WalletMeta(from: .mnemonic)
     let keystore = try! IdentityKeystore(metadata: meta, mnemonic: TestData.mnemonic, password: TestData.password)
     XCTAssert(keystore.verify(password: TestData.password))
     XCTAssertFalse(keystore.verify(password: "bad" + TestData.password))
   }
 
   func testMnemonicFromPassword() {
-    let meta = WalletMeta(source: .newIdentity)
+    let meta = WalletMeta(from: .mnemonic)
     let keystore = try! IdentityKeystore(metadata: meta, mnemonic: TestData.mnemonic, password: TestData.password)
     let mnemomic = try? keystore.mnemonic(from: TestData.password)
     XCTAssertEqual(mnemomic, TestData.mnemonic)
   }
 
   func testSerializeToMap() {
-    let meta = WalletMeta(source: .newIdentity)
+    let meta = WalletMeta(from:.mnemonic)
     var keystore = try! IdentityKeystore(metadata: meta, mnemonic: TestData.mnemonic, password: TestData.password)
 
     let data = TestHelper.loadJSON(filename: "v3-pbkdf2-testpassword").data(using: .utf8)!

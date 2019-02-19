@@ -31,7 +31,7 @@ class EOSTransactionSignerTests: TestCase {
 //  }
 
   func testSignWithWrongPassword() {
-    let wallet = try! WalletManager.importEOS(from: TestData.mnemonic, accountName: "", permissions: [], metadata: WalletMeta(chain: .eos, source: .mnemonic), encryptBy: TestData.password, at: BIP44.eos)
+    let wallet = try! WalletManager.importEOS(from: TestData.mnemonic, accountName: "", permissions: [], metadata: WalletMeta(chain: .eos, from: .mnemonic), encryptBy: TestData.password, at: BIP44.eos)
     let txs = [
       EOSTransaction(
         data: "c578065b93aec6a7c811000000000100a6823403ea3055000000572d3ccdcd01000000602a48b37400000000a8ed323225000000602a48b374208410425c95b1ca80969800000000000453595300000000046d656d6f00",

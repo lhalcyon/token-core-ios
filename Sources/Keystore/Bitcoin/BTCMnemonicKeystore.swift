@@ -103,7 +103,7 @@ public struct BTCMnemonicKeystore: Keystore, EncMnemonicKeystore, XPrvCrypto {
     if let metaJSON = json[WalletMeta.key] as? JSONObject {
       meta = try WalletMeta(json: metaJSON)
     } else {
-      meta = WalletMeta(chain: .btc, source: .newIdentity)
+      meta = WalletMeta(chain: .btc, from: .mnemonic)
     }
   }
 
@@ -129,7 +129,7 @@ public struct BTCMnemonicKeystore: Keystore, EncMnemonicKeystore, XPrvCrypto {
       "externalAddress": externalMap,
       "encXPub": getEncryptedXPub(),
       "createdAt": (Int)(meta.timestamp),
-      "source": meta.source.rawValue,
+      "from": meta.walletFrom!.rawValue,
       "chainType": meta.chain!.rawValue,
       "segWit": meta.segWit.rawValue
     ]

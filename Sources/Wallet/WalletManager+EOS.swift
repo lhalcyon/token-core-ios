@@ -35,7 +35,7 @@ public extension WalletManager {
   public static func setEOSAccountName(walletID: String, accountName: String) throws -> BasicWallet {
     let wallet = try findWalletByWalletID(walletID)
 
-    if wallet.imTokenMeta.chain != .eos {
+    if wallet.metadata.chain != .eos {
       throw GenericError.operationUnsupported
     }
 

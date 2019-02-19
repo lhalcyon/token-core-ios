@@ -11,7 +11,7 @@ import XCTest
 
 class BTCMnemonicKeystoreTests: TestCase {
   func testInit() {
-    let meta = WalletMeta(chain: .btc, source: .mnemonic)
+    let meta = WalletMeta(chain: .btc, from: .mnemonic)
     let keystore = try? BTCMnemonicKeystore(password: TestData.password, mnemonic: TestData.mnemonic, path: BIP44.btcMainnet, metadata: meta)
     XCTAssertNotNil(keystore)
     XCTAssertEqual(keystore!.address, "12z6UzsA3tjpaeuvA2Zr9jwx19Azz74D6g")
@@ -19,7 +19,7 @@ class BTCMnemonicKeystoreTests: TestCase {
   }
 
   func testTestnetInit() {
-    let meta = WalletMeta(chain: .btc, source: .mnemonic, network: .testnet)
+    let meta = WalletMeta(chain: .btc, from: .mnemonic, network: .testnet)
     let keystore = try? BTCMnemonicKeystore(password: TestData.password, mnemonic: TestData.mnemonic, path: BIP44.btcTestnet, metadata: meta)
     XCTAssertNotNil(keystore)
     XCTAssertEqual(keystore!.address, "mkeNU5nVnozJiaACDELLCsVUc8Wxoh1rQN")
@@ -29,20 +29,20 @@ class BTCMnemonicKeystoreTests: TestCase {
   func testGetEncryptedXPub() {
     BTCMnemonicKeystore.commonKey = "11111111111111111111111111111111"
     BTCMnemonicKeystore.commonIv = "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC"
-    let meta = WalletMeta(chain: .btc, source: .mnemonic)
+    let meta = WalletMeta(chain: .btc, from: .mnemonic)
     let keystore = try! BTCMnemonicKeystore(password: TestData.password, mnemonic: TestData.mnemonic, path: BIP44.btcMainnet, metadata: meta)
     XCTAssertEqual("KumI81YksYmQgSibrUhoXv3M1GRlON0Ots/HFxHSaIFzbW1g8wZAC/ozIz2M/xgE9B30RfgxlbHAOobt+T0T5iIn14EzeliOk6O5p05F53CZS1bGhNdoAlOogKzN9FMP61CzFyMG29GAIGigUbTY8g==", keystore.getEncryptedXPub())
   }
 
   func testCalcExternalAddress() {
-    let meta = WalletMeta(chain: .btc, source: .mnemonic)
+    let meta = WalletMeta(chain: .btc, from: .mnemonic)
     let keystore = try! BTCMnemonicKeystore(password: TestData.password, mnemonic: TestData.mnemonic, path: BIP44.btcMainnet, metadata: meta)
     XCTAssertEqual("12z6UzsA3tjpaeuvA2Zr9jwx19Azz74D6g", keystore.calcExternalAddress(at: 0))
     XCTAssertEqual("1962gsZ8PoPUYHneFakkCTrukdFMVQ4i4T", keystore.calcExternalAddress(at: 1))
   }
 
   func testToJSON() {
-    let meta = WalletMeta(chain: .btc, source: .mnemonic)
+    let meta = WalletMeta(chain: .btc, from: .mnemonic)
     let keystore = try! BTCMnemonicKeystore(password: TestData.password, mnemonic: TestData.mnemonic, path: BIP44.btcMainnet, metadata: meta)
     let json = keystore.toJSON()
     XCTAssertEqual(json["mnemonicPath"] as? String, BIP44.btcMainnet)
@@ -52,7 +52,7 @@ class BTCMnemonicKeystoreTests: TestCase {
 // SegWit
 extension BTCMnemonicKeystoreTests {
   func testInitSegWit() {
-    var meta = WalletMeta(chain: .btc, source: .mnemonic)
+    var meta = WalletMeta(chain: .btc, from: .mnemonic)
     meta.segWit = .p2wpkh
     let keystore = try? BTCMnemonicKeystore(password: TestData.password, mnemonic: TestData.mnemonic, path: BIP44.btcSegwitMainnet, metadata: meta)
     XCTAssertNotNil(keystore)
@@ -61,7 +61,7 @@ extension BTCMnemonicKeystoreTests {
   }
 
   func testTestnetInitSegWit() {
-    var meta = WalletMeta(chain: .btc, source: .mnemonic, network: .testnet)
+    var meta = WalletMeta(chain: .btc, from: .mnemonic, network: .testnet)
     meta.segWit = .p2wpkh
     let keystore = try? BTCMnemonicKeystore(password: TestData.password, mnemonic: TestData.mnemonic, path: BIP44.btcSegwitTestnet, metadata: meta)
     XCTAssertNotNil(keystore)
@@ -70,7 +70,7 @@ extension BTCMnemonicKeystoreTests {
   }
 
   func testCalcExternalAddressSegWit() {
-    var meta = WalletMeta(chain: .btc, source: .mnemonic)
+    var meta = WalletMeta(chain: .btc, from: .mnemonic)
     meta.segWit = .p2wpkh
     let keystore = try! BTCMnemonicKeystore(password: TestData.password, mnemonic: TestData.mnemonic, path: BIP44.btcSegwitMainnet, metadata: meta)
     XCTAssertEqual("3JmreiUEKn8P3SyLYmZ7C1YCd4r2nFy3Dp", keystore.calcExternalAddress(at: 0))

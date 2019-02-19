@@ -29,7 +29,7 @@ class KDFPerformanceTests: XCTestCase { // Do NOT inherit from TestCase, which d
 
   func testCreateIdentityKeystore() {
     measure {
-      var metadata = WalletMeta(source: .recoveredIdentity)
+      var metadata = WalletMeta(from: .mnemonic)
       metadata.network = .testnet
       Crypto.ScryptKdfparams.defaultN = 262_144
 
@@ -50,8 +50,7 @@ class KDFPerformanceTests: XCTestCase { // Do NOT inherit from TestCase, which d
     BTCMnemonicKeystore.commonKey = "11111111111111111111111111111111"
     BTCMnemonicKeystore.commonIv = "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC"
     StorageManager.storageType = InMemoryStorage.self
-    var metadata = WalletMeta(source: .newIdentity)
-    metadata.name = "kdf tweak"
+    var metadata = WalletMeta(from: .mnemonic)
     metadata.network = .mainnet
     let (mnemonic, identity) = try! Identity.createIdentity(password: TestData.password, metadata: metadata)
 

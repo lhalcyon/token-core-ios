@@ -11,13 +11,13 @@ import XCTest
 
 class KeystoreTests: TestCase {
   func testEthSerializeToMap() {
-    let meta = WalletMeta(chain: .eth, source: .privateKey)
+    let meta = WalletMeta(chain: .eth, from: .privateKey)
     let keystore = try! ETHKeystore(password: TestData.password, privateKey: TestData.privateKey, metadata: meta)
     XCTAssertNotNil(keystore)
   }
 
   func testBtcSerializeToMap() {
-    var meta = WalletMeta(chain: .btc, source: .wif)
+    var meta = WalletMeta(chain: .btc, from: .wif)
     meta.segWit = .p2wpkh
     let keystore = try! BTCKeystore(password: TestData.password, wif: TestData.wif, metadata: meta)
     XCTAssertNotNil(keystore)

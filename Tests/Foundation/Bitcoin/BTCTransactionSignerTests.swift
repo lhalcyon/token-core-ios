@@ -54,7 +54,7 @@ class BTCTransactionSignerTests: TestCase {
   func testSignTransactionMultipleUTXO() {
     do {
       let identity = Identity.currentIdentity!
-      let metadata = WalletMeta(chain: .btc, source: .mnemonic, network: .testnet)
+      let metadata = WalletMeta(chain: .btc, from: .mnemonic, network: .testnet)
       let wallet = try identity.importFromMnemonic(TestData.mnemonic, metadata: metadata, encryptBy: TestData.password, at: BIP44.btcTestnet)
 
       let outputs: [[String: Any]] = [
@@ -103,7 +103,7 @@ class BTCTransactionSignerTests: TestCase {
   func testInsufficientFunds() {
     do {
       let identity = Identity.currentIdentity!
-      let metadata = WalletMeta(chain: .btc, source: .mnemonic, network: .testnet)
+      let metadata = WalletMeta(chain: .btc, from: .mnemonic, network: .testnet)
       let wallet = try identity.importFromMnemonic(TestData.mnemonic, metadata: metadata, encryptBy: TestData.password, at: BIP44.btcTestnet)
 
       let outputs: [[String: Any]] = [
@@ -134,7 +134,7 @@ class BTCTransactionSignerTests: TestCase {
   func testSignSegWetTransaction() {
     do {
       let identity = Identity.currentIdentity!
-      let metadata = WalletMeta(chain: .btc, source: .mnemonic, network: .testnet)
+      let metadata = WalletMeta(chain: .btc, from: .mnemonic, network: .testnet)
       let wallet = try identity.importFromMnemonic(TestData.mnemonic, metadata: metadata, encryptBy: TestData.password, at: BIP44.btcSegwitTestnet)
 
       let outputs: [[String: Any]] = [
@@ -228,7 +228,7 @@ class BTCTransactionSignerTests: TestCase {
   func testSegWitSignDustOutput() {
     do {
       let identity = Identity.currentIdentity!
-      let metadata = WalletMeta(chain: .btc, source: .mnemonic, network: .testnet)
+      let metadata = WalletMeta(chain: .btc, from: .mnemonic, network: .testnet)
       let wallet = try identity.importFromMnemonic(TestData.mnemonic, metadata: metadata, encryptBy: TestData.password, at: BIP44.btcSegwitTestnet)
       
       let outputs: [[String: Any]] = [
@@ -268,7 +268,7 @@ class BTCTransactionSignerTests: TestCase {
   func testSignMultiUXTOBySegWit() {
     do {
       let identity = Identity.currentIdentity!
-      let metadata = WalletMeta(chain: .btc, source: .wif, network: .testnet)
+      let metadata = WalletMeta(chain: .btc, from: .wif, network: .testnet)
       let wallet = try identity.importFromPrivateKey("cT4fTJyLd5RmSZFHnkGmVCzXDKuJLbyTt7cy77ghTTCagzNdPH1j", encryptedBy: TestData.password, metadata: metadata)
     
       let outputs: [[String: Any]] = [

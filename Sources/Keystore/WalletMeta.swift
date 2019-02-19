@@ -8,73 +8,48 @@
 
 import Foundation
 
+
+
 public struct WalletMeta {
-  static let key = "imTokenMeta"
+  static let key = "tokenCoreMeta"
 
-  public enum Source: String {
-    case newIdentity = "NEW_IDENTITY"
-    case recoveredIdentity = "RECOVERED_IDENTITY"
-    case privateKey = "PRIVATE"
-    case wif = "WIF"
-    case keystore = "KEYSTORE"
-    case mnemonic = "MNEMONIC"
-  }
-
-  public enum Mode: String {
-    case normal
-    case offlineSigning
-    case hardware
-  }
-
-
-  var mode: Mode = .normal
-
-  public var name: String = ""
-  public var passwordHint: String = ""
   public var network: Network?
   public var chain: ChainType?
-  public let source: Source
+  public let walletFrom: WalletFrom?
   
-
   var segWit = SegWit.none
 
   let timestamp: Double
   let version: String
   var backup: [String] = []
 
-  public init(source: Source) {
-    self.source = source
+  public init(from: WalletFrom) {
+    self.walletFrom = from
     timestamp = WalletMeta.currentTime
     version = WalletMeta.currentVersion
   }
 
-  public init(chain: ChainType, source: Source, network: Network? = .mainnet) {
-    self.source = source
+  public init(chain: ChainType, from: WalletFrom?, network: Network? = .mainnet) {
+    self.walletFrom = from
     self.chain = chain
     self.network = network
     timestamp = WalletMeta.currentTime
     version = WalletMeta.currentVersion
   }
 
-  public init(_ map: [AnyHashable: Any], source: Source? = nil) {
-    if let name = map["name"] as? String {
-      self.name = name
-    }
-    if let passwordHint = map["passwordHint"] as? String {
-      self.passwordHint = passwordHint
-    }
+  public init(_ map: [AnyHashable: Any], from: WalletFrom? = nil) {
     if let chainStr = map["chainType"] as? String, let chainType = ChainType(rawValue: chainStr) {
       chain = chainType
     }
     if let networkStr = map["network"] as? String, let network = Network(rawValue: networkStr) {
       self.network = network
     }
-    if source != nil {
-      self.source = source!
-    } else if let sourceStr = map["source"] as? String, let source = Source(rawValue: sourceStr) {
-      self.source = source
+    if from != nil {
+      self.walletFrom = from!
+    } else if let fromStr = map["from"] as? String, let from = WalletFrom(rawValue: fromStr) {
+      self.walletFrom = from
     } else {
-      self.source = .newIdentity
+      self.walletFrom = .mnemonic
     }
 
     if let segWitStr = map["segWit"] as? String, let segWit = SegWit(rawValue: segWitStr) {
@@ -86,10 +61,10 @@ public struct WalletMeta {
   }
 
   public init(json: JSONObject) throws {
-    if let source = Source(rawValue: (json["source"] as? String) ?? "") {
-      self.source = source
+    if let from = WalletFrom(rawValue: (json["from"] as? String) ?? "") {
+      self.walletFrom = from
     } else {
-      self.source = .newIdentity
+      self.walletFrom = .mnemonic
     }
 
     if let timestampString = json["timestamp"] as? String, let timestamp = Double(timestampString) {
@@ -104,7 +79,7 @@ public struct WalletMeta {
       version = WalletMeta.currentVersion
     }
 
-    if let chainStr = json["chain"] as? String,
+    if let chainStr = json["chainType"] as? String,
       let chain = ChainType(rawValue: chainStr) {
       self.chain = chain
     }
@@ -114,46 +89,26 @@ public struct WalletMeta {
       self.network = network
     }
 
-    if let mode = Mode(rawValue: (json["mode"] as? String) ?? "") {
-      self.mode = mode
-    }
-
-    if let name = json["name"] as? String {
-      self.name = name
-    }
-
-    if let passwordHint = json["passwordHint"] as? String {
-      self.passwordHint = passwordHint
-    }
-
     if let segWitStr = json["segWit"] as? String, let segWit = SegWit(rawValue: segWitStr) {
       self.segWit = segWit
     }
 
-    if let backup = json["backup"] as? [String] {
-      self.backup = backup
-    }
   }
 
-  func mergeMeta(_ name: String, chainType: ChainType) -> WalletMeta {
+  func mergeMeta(chainType: ChainType) -> WalletMeta {
     var metadata = self
-    metadata.name = name
     metadata.chain = chainType
     return metadata
   }
 
   func toJSON() -> JSONObject {
     var json: JSONObject = [
-      "source": source.rawValue,
+      "from": walletFrom?.rawValue ?? "",
       "timestamp": "\(timestamp)",
       "version": version,
-      "mode": mode.rawValue,
-      "name": name,
-      "passwordHint": passwordHint,
-      "backup": backup
     ]
     if chain != nil {
-      json["chain"] = chain!.rawValue
+      json["chainType"] = chain!.rawValue
     }
 
     if network != nil {
