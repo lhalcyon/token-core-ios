@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		14C963075CDA93BA169FCB96 /* IdentityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14C96E33A3F67F8CB5304B2C /* IdentityTests.swift */; };
 		1A0D28BD20773ED2000377EA /* BTCKeystoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0D28BC20773ED2000377EA /* BTCKeystoreTests.swift */; };
 		1A159C092068D1410008019F /* TokenCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A159BFF2068D1410008019F /* TokenCore.framework */; };
 		1A159C102068D1410008019F /* TokenCore.h in Headers */ = {isa = PBXBuildFile; fileRef = 1A159C022068D1410008019F /* TokenCore.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -282,6 +283,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		14C96E33A3F67F8CB5304B2C /* IdentityTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IdentityTests.swift; sourceTree = "<group>"; };
 		1A0D28BC20773ED2000377EA /* BTCKeystoreTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BTCKeystoreTests.swift; sourceTree = "<group>"; };
 		1A159BFF2068D1410008019F /* TokenCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = TokenCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1A159C022068D1410008019F /* TokenCore.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TokenCore.h; sourceTree = "<group>"; };
@@ -1009,6 +1011,7 @@
 		1AC7576820721E3500FB2486 /* Wallet */ = {
 			isa = PBXGroup;
 			children = (
+				14C96E33A3F67F8CB5304B2C /* IdentityTests.swift */,
 			);
 			path = Wallet;
 			sourceTree = "<group>";
@@ -1610,6 +1613,7 @@
 				1AC7C901206B3F5F00A78F7E /* AddressValidatorTests.swift in Sources */,
 				1A65A950210057EC003EFC82 /* KDFPerformanceTests.swift in Sources */,
 				1A6927722069C83500404E68 /* HexTests.swift in Sources */,
+				14C963075CDA93BA169FCB96 /* IdentityTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

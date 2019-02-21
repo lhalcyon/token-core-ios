@@ -45,19 +45,8 @@ public extension WalletManager {
 
     try keystore.setAccountName(accountName)
     wallet.keystore = keystore
-    if !Identity.storage.flushWallet(keystore) {
-      throw GenericError.storeWalletFailed
-    }
 
     return wallet
-  }
-
-  public static func exportPrivateKeys(walletID: String, password: String) throws -> [KeyPair] {
-    guard let wallet = Identity.currentIdentity?.findWalletByWalletID(walletID) else {
-      throw GenericError.walletNotFound
-    }
-
-    return try wallet.privateKeys(password: password)
   }
 
   /// Sign EOS transaction
@@ -66,13 +55,11 @@ public extension WalletManager {
   ///   - txs: Array of EOSTransaction.
   ///   - password: Wallet password.
   public static func eosSignTransaction(
-    walletID: String,
+    wallet: BasicWallet,
     txs: [EOSTransaction],
     password: String
     ) throws -> [EOSSignResult] {
-    guard let wallet = Identity.currentIdentity?.findWalletByWalletID(walletID) else {
-      throw GenericError.walletNotFound
-    }
+
 
     return try EOSTransactionSigner(txs: txs, keystore: wallet.keystore, password: password).sign()
   }

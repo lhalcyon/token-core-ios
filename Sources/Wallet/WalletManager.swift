@@ -69,32 +69,7 @@ public struct WalletManager {
     return wallet
   }
 
-  public static func exportPrivateKey(walletID: String, password: String) throws -> String {
-    guard let wallet = Identity.currentIdentity?.findWalletByWalletID(walletID) else {
-      throw GenericError.walletNotFound
-    }
 
-    return try wallet.privateKey(password: password)
-  }
-
-  public static func exportMnemonic(walletID: String, password: String) throws -> String {
-    guard let wallet = Identity.currentIdentity?.findWalletByWalletID(walletID) else {
-      throw GenericError.walletNotFound
-    }
-    return try wallet.exportMnemonic(password: password)
-  }
-
-  public static func exportKeystore(walletID: String, password: String) throws -> String {
-    guard let wallet = Identity.currentIdentity?.findWalletByWalletID(walletID) else {
-      throw GenericError.walletNotFound
-    }
-
-    guard wallet.verifyPassword(password) else {
-      throw PasswordError.incorrect
-    }
-
-    return wallet.export()
-  }
 
   /**
    Sign transaction with given parameters
@@ -102,7 +77,7 @@ public struct WalletManager {
    - returns signed data
    */
   public static func ethSignTransaction(
-    walletID: String,
+    wallet:BasicWallet,
     nonce: String,
     gasPrice: String,
     gasLimit: String,
@@ -112,9 +87,6 @@ public struct WalletManager {
     password: String,
     chainID: Int
   ) throws -> TransactionSignedResult {
-    guard let wallet = Identity.currentIdentity?.findWalletByWalletID(walletID) else {
-      throw GenericError.walletNotFound
-    }
 
     let privateKey = try wallet.privateKey(password: password)
 
@@ -133,7 +105,7 @@ public struct WalletManager {
   }
 
   public static func btcSignTransaction(
-    walletID: String,
+    wallet: BasicWallet,
     to: String,
     amount: Int64,
     fee: Int64,
@@ -143,9 +115,9 @@ public struct WalletManager {
     isTestnet: Bool,
     segWit: SegWit
   ) throws -> TransactionSignedResult {
-    guard let wallet = Identity.currentIdentity?.findWalletByWalletID(walletID) else {
-      throw GenericError.walletNotFound
-    }
+//    guard let wallet = Identity.currentIdentity?.findWalletByWalletID(walletID) else {
+//      throw GenericError.walletNotFound
+//    }
 
     guard let toAddress = BTCAddress(string: to) else {
       throw AddressError.invalid
@@ -230,15 +202,11 @@ public struct WalletManager {
       )
     }
     // check if the new walle will override the wallet derived by identity
-    if Identity.currentIdentity?.findWalletByAddress(newKeystore.address, on: .btc) != nil {
-      throw AddressError.alreadyExist
-    }
+//    if Identity.currentIdentity?.findWalletByAddress(newKeystore.address, on: .btc) != nil {
+//      throw AddressError.alreadyExist
+//    }
 
     wallet.keystore = newKeystore
-    if !Identity.storage.flushWallet(newKeystore) {
-      throw GenericError.storeWalletFailed
-    }
-
     return wallet
   }
   

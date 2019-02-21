@@ -35,7 +35,8 @@ public final class ExIdentity {
       return nil
     }
     self.keystore = keystore
-    self.keystore.wallets = Identity.storage.loadWalletByIDs(self.keystore.walletIds)
+    // TODO implement
+//    self.keystore.wallets = Identity.storage.loadWalletByIDs(self.keystore.walletIds)
   }
   public func exportMnemonic(password: String) throws -> String {
     guard keystore.verify(password: password) else {
@@ -71,14 +72,8 @@ extension ExIdentity {
     keystore.walletIds.append(wallet.walletID)
     return wallet
   }
-  func removeWallet(_ wallet: BasicWallet) -> Bool {
-    if let index = keystore.walletIds.index(where: { return $0 == wallet.walletID }) {
-      keystore.wallets.remove(at: index)
-      keystore.walletIds.remove(at: index)
-      return Identity.storage.flushIdentity(keystore)
-    }
-    return false
-  }
+
+
   func importFromMnemonic(_ mnemonic: String, metadata: WalletMeta, encryptBy password: String, at path: String) throws -> BasicWallet {
     if path.isEmpty {
       throw MnemonicError.pathInvalid

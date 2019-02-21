@@ -29,12 +29,13 @@ public struct WalletMeta {
     version = WalletMeta.currentVersion
   }
 
-  public init(chain: ChainType, from: WalletFrom?, network: Network? = .mainnet) {
+  public init(chain: ChainType, from: WalletFrom?, network: Network? = .mainnet,segwit: SegWit = .none) {
     self.walletFrom = from
     self.chain = chain
     self.network = network
     timestamp = WalletMeta.currentTime
     version = WalletMeta.currentVersion
+    self.segWit = segwit
   }
 
   public init(_ map: [AnyHashable: Any], from: WalletFrom? = nil) {

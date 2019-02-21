@@ -23,6 +23,20 @@ func XCTAssertMapEqual(_ expectedMap: [AnyHashable: Any], _ actual: [AnyHashable
   }
 }
 
+struct SampleKey {
+
+  static let password = "qq123456"
+
+  static let mnemonic = "inform cliff crisp electric cube notable trade quit segment loan turkey valve"
+
+  static let mainEthereumAddress = "0xf34596d51A6f5587BFa72FD8Ea455dDf953B5aC9"
+
+  static let mainBitcoinTestnetAddress = "myVftRaBb8Vy3upWaL8TueAhDE2QAsQy1h"
+
+  static let walletMeta = WalletMeta(chain: ChainType.btc, from: WalletFrom.mnemonic, network: Network.testnet)
+
+}
+
 struct TestData {
   static let password = "Insecure Pa55w0rd"
   static let passwordHint = "password hint"
@@ -59,9 +73,6 @@ class TestCase: XCTestCase {
 
   override func tearDown() {
     _ = storage.cleanStorage()
-    StorageManager.storageType = LocalFileStorage.self
-    _ = try! Identity.currentIdentity?.delete(password: TestData.password)
-
     super.tearDown()
   }
 }

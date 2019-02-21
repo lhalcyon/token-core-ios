@@ -53,7 +53,7 @@ class BTCTransactionSignerTests: TestCase {
 
   func testSignTransactionMultipleUTXO() {
     do {
-      let identity = Identity.currentIdentity!
+      let identity = try Identity.createIdentity(password: SampleKey.password, metadata: SampleKey.walletMeta).1
       let metadata = WalletMeta(chain: .btc, from: .mnemonic, network: .testnet)
       let wallet = try identity.importFromMnemonic(TestData.mnemonic, metadata: metadata, encryptBy: TestData.password, at: BIP44.btcTestnet)
 
@@ -92,7 +92,7 @@ class BTCTransactionSignerTests: TestCase {
         ]
       ]
 
-      let signedResult = try WalletManager.btcSignTransaction(walletID: wallet.walletID, to: "moLK3tBG86ifpDDTqAQzs4a9cUoNjVLRE3", amount: 750000000, fee: 502130, password: TestData.password, outputs: outputs, changeIdx: 53, isTestnet: true, segWit: .none)
+      let signedResult = try WalletManager.btcSignTransaction(wallet: wallet, to: "moLK3tBG86ifpDDTqAQzs4a9cUoNjVLRE3", amount: 750000000, fee: 502130, password: TestData.password, outputs: outputs, changeIdx: 53, isTestnet: true, segWit: .none)
       let expected = "01000000047a222fb053b6e5339a9b6f9649f88a9481606cf3c64c4557802b3a819ddf3a98000000006b483045022100c4f39ce7f2448ab8e7154a7b7ce82edd034e3f33e1f917ca43e4aff822ba804c02206dd146d1772a45bb5e51abb081d066114e78bcb504671f61c5a301a647a494ac01210312a0cb31ff52c480c049da26d0aaa600f47e9deee53d02fc2b0e9acf3c20fbdfffffffff31b5a9794dcaf82af1738745afe1ecf402ea4a93e71ae75c7d3d8bf7c78aef45010000006b483045022100d235afda9a56aaa4cbe05df712202e6b1a45aab7a0c83540d3053133f15acc5602201b0e144bec3a02a5c556596040b0be81b0202c19b163bb537b8d965afd61403a0121033d710ab45bb54ac99618ad23b3c1da661631aa25f23bfe9d22b41876f1d46e4effffffffa92c40dfd195a188d87110557fb7f46dbbfb68c4bb8718f33dc31d61927ec614000000006b483045022100dd8f1e20116f96a3400f55e0c637a0ad21ae47ff92d83ffb0c3d324c684a54be0220064b0a6d316154ef07a69bd82de3a052e43c3c6bb0e55e4de4de939b093e1a3a0121033d710ab45bb54ac99618ad23b3c1da661631aa25f23bfe9d22b41876f1d46e4effffffffb99a3e8884b14f330d2a444a4bc2a03af16804fb99b5e37ee892ed5db8b67f11010000006a473044022048d8cb0f1480174b3b9186cc6fe410db765f1f9d3ce036b0d4dee0eb19aa3641022073de4bb2b00a0533e9c8f3e074c655e0695c8b223233ddecf3c99a84351d50a60121033d710ab45bb54ac99618ad23b3c1da661631aa25f23bfe9d22b41876f1d46e4effffffff028017b42c000000001976a91455bdc1b42e3bed851959846ddf600e96125423e088ac0e47f302000000001976a91412967cdd9ceb72bbdbb7e5db85e2dbc6d6c3ab1a88ac00000000";
       XCTAssertEqual(expected, signedResult.signedTx)
     } catch {
@@ -102,7 +102,7 @@ class BTCTransactionSignerTests: TestCase {
 
   func testInsufficientFunds() {
     do {
-      let identity = Identity.currentIdentity!
+      let identity = try Identity.createIdentity(password: SampleKey.password, metadata: SampleKey.walletMeta).1
       let metadata = WalletMeta(chain: .btc, from: .mnemonic, network: .testnet)
       let wallet = try identity.importFromMnemonic(TestData.mnemonic, metadata: metadata, encryptBy: TestData.password, at: BIP44.btcTestnet)
 
@@ -125,7 +125,7 @@ class BTCTransactionSignerTests: TestCase {
         ]
       ]
 
-      XCTAssertThrowsError(try WalletManager.btcSignTransaction(walletID: wallet.walletID, to: "moLK3tBG86ifpDDTqAQzs4a9cUoNjVLRE3", amount: 410000000, fee: 502130, password: TestData.password, outputs: outputs, changeIdx: 53, isTestnet: true, segWit: .none))
+      XCTAssertThrowsError(try WalletManager.btcSignTransaction(wallet: wallet, to: "moLK3tBG86ifpDDTqAQzs4a9cUoNjVLRE3", amount: 410000000, fee: 502130, password: TestData.password, outputs: outputs, changeIdx: 53, isTestnet: true, segWit: .none))
     } catch {
       XCTFail()
     }
@@ -133,7 +133,7 @@ class BTCTransactionSignerTests: TestCase {
 
   func testSignSegWetTransaction() {
     do {
-      let identity = Identity.currentIdentity!
+      let identity = try Identity.createIdentity(password: SampleKey.password, metadata: SampleKey.walletMeta).1
       let metadata = WalletMeta(chain: .btc, from: .mnemonic, network: .testnet)
       let wallet = try identity.importFromMnemonic(TestData.mnemonic, metadata: metadata, encryptBy: TestData.password, at: BIP44.btcSegwitTestnet)
 
@@ -156,7 +156,7 @@ class BTCTransactionSignerTests: TestCase {
         ]
       ]
 
-      let signedResult = try WalletManager.btcSignTransaction(walletID: wallet.walletID, to: "2N9wBy6f1KTUF5h2UUeqRdKnBT6oSMh4Whp", amount: 80000, fee: 10000, password: TestData.password, outputs: outputs, changeIdx: 0, isTestnet: true, segWit: .p2wpkh)
+      let signedResult = try WalletManager.btcSignTransaction(wallet: wallet, to: "2N9wBy6f1KTUF5h2UUeqRdKnBT6oSMh4Whp", amount: 80000, fee: 10000, password: TestData.password, outputs: outputs, changeIdx: 0, isTestnet: true, segWit: .p2wpkh)
       let expected = "020000000001027f717276057e6012afa99385c18cc692397a666560520577679bf38c08b5cec20000000017160014654fbb08267f3d50d715a8f1abb55979b160dd5bffffffff74cdd54bc48333e1d2f108460284d137c39b6c417d9ff55a572a9550d428d69a00000000171600149d66aa6399de69d5c5ae19f9098047760251a854ffffffff02803801000000000017a914b710f6e5049eaf0404c2f02f091dd5bb79fa135e87102700000000000017a914755fba51b5c443b9f16b1f86665dec10dd7a25c58702483045022100f0c66cd322e50f992ad34448fb3bf823066e5ffaa8e840a901058a863a4d950c02206cdafb1ad1ef4d938122b106069d8b435387e4d55711f50a46a8d91d9f674c550121031aee5e20399d68cf0035d1a21564868f22bc448ab205292b4279136b15ecaebc02483045022100cfe92e4ad4fbfc13be20afc6f37429e26426257d015b409d28c260544e581b2c022028412816d1fef11093b474c2c662a25a4062f4e37d06ce66207863de98814a07012103a241c8d13dd5c92475652c43bf56580fbf9f1e8bc0aa0132ddc8443c03062bb900000000";
       XCTAssertEqual(expected, signedResult.signedTx)
     } catch {
@@ -227,7 +227,7 @@ class BTCTransactionSignerTests: TestCase {
   
   func testSegWitSignDustOutput() {
     do {
-      let identity = Identity.currentIdentity!
+      let identity = try Identity.createIdentity(password: SampleKey.password, metadata: SampleKey.walletMeta).1
       let metadata = WalletMeta(chain: .btc, from: .mnemonic, network: .testnet)
       let wallet = try identity.importFromMnemonic(TestData.mnemonic, metadata: metadata, encryptBy: TestData.password, at: BIP44.btcSegwitTestnet)
       
@@ -250,13 +250,13 @@ class BTCTransactionSignerTests: TestCase {
         ]
       ]
       do {
-        _ = try WalletManager.btcSignTransaction(walletID: wallet.walletID, to: "2N9wBy6f1KTUF5h2UUeqRdKnBT6oSMh4Whp", amount: 2000, fee: 10000, password: TestData.password, outputs: outputs, changeIdx: 0, isTestnet: true, segWit: .p2wpkh)
+        _ = try WalletManager.btcSignTransaction(wallet: wallet, to: "2N9wBy6f1KTUF5h2UUeqRdKnBT6oSMh4Whp", amount: 2000, fee: 10000, password: TestData.password, outputs: outputs, changeIdx: 0, isTestnet: true, segWit: .p2wpkh)
         XCTFail("Should throw amount_less_than_minimum")
       } catch {
         XCTAssertEqual(GenericError.amountLessThanMinimum.localizedDescription, error.localizedDescription)
       }
       
-      let signedResult = try WalletManager.btcSignTransaction(walletID: wallet.walletID, to: "2N9wBy6f1KTUF5h2UUeqRdKnBT6oSMh4Whp", amount: (50000 + 50000 - 12000), fee: 10000, password: TestData.password, outputs: outputs, changeIdx: 0, isTestnet: true, segWit: .p2wpkh)
+      let signedResult = try WalletManager.btcSignTransaction(wallet: wallet, to: "2N9wBy6f1KTUF5h2UUeqRdKnBT6oSMh4Whp", amount: (50000 + 50000 - 12000), fee: 10000, password: TestData.password, outputs: outputs, changeIdx: 0, isTestnet: true, segWit: .p2wpkh)
       let expected = "020000000001027f717276057e6012afa99385c18cc692397a666560520577679bf38c08b5cec20000000017160014654fbb08267f3d50d715a8f1abb55979b160dd5bffffffff74cdd54bc48333e1d2f108460284d137c39b6c417d9ff55a572a9550d428d69a00000000171600149d66aa6399de69d5c5ae19f9098047760251a854ffffffff01c05701000000000017a914b710f6e5049eaf0404c2f02f091dd5bb79fa135e870247304402205fd9dea5df0db5cc7b1d4b969f63b4526fb00fd5563ab91012cb511744a53d570220784abfe099a2b063b1cfc1f145fef2ffcb100b0891514fa164d357f0ef7ca6bb0121031aee5e20399d68cf0035d1a21564868f22bc448ab205292b4279136b15ecaebc02483045022100b0246c12428dbf863fcc9060ab6fc46dc2135adaa6cf8117de49f9acecaccf6c022059377d05c9cab24b7dec14242ea3206cc1f464d5ff9904dca515fc71766507cd012103a241c8d13dd5c92475652c43bf56580fbf9f1e8bc0aa0132ddc8443c03062bb900000000";
       // sign result doesn't contain change output, you can check this on : https://live.blockcypher.com/btc/decodetx/
       XCTAssertEqual(expected, signedResult.signedTx)
@@ -267,7 +267,7 @@ class BTCTransactionSignerTests: TestCase {
   
   func testSignMultiUXTOBySegWit() {
     do {
-      let identity = Identity.currentIdentity!
+      let identity = try Identity.createIdentity(password: SampleKey.password, metadata: SampleKey.walletMeta).1
       let metadata = WalletMeta(chain: .btc, from: .wif, network: .testnet)
       let wallet = try identity.importFromPrivateKey("cT4fTJyLd5RmSZFHnkGmVCzXDKuJLbyTt7cy77ghTTCagzNdPH1j", encryptedBy: TestData.password, metadata: metadata)
     
@@ -290,7 +290,7 @@ class BTCTransactionSignerTests: TestCase {
         ]
       ]
     
-      let signedResult  = try WalletManager.btcSignTransaction(walletID: wallet.walletID, to: "mvqN876ymCo7HbRbmYoaoMfwigBdEKx4J1", amount: 195000000, fee: 210090, password: TestData.password, outputs: outputs, changeIdx: 0, isTestnet: true, segWit: .p2wpkh)
+      let signedResult  = try WalletManager.btcSignTransaction(wallet: wallet, to: "mvqN876ymCo7HbRbmYoaoMfwigBdEKx4J1", amount: 195000000, fee: 210090, password: TestData.password, outputs: outputs, changeIdx: 0, isTestnet: true, segWit: .p2wpkh)
       let expected = "020000000001023a6591b6dbc3c9f73e3b384bae1739bb24594d74519d9ebefd2a1fb1bdda2cea0100000017160014e6cfaab9a59ba187f0a45db0b169c21bb48f09b3ffffffff66e382a9917a4890aeda1604e6c0294b6eb798101e8c1b2eb1def634e5683bad0000000017160014e6cfaab9a59ba187f0a45db0b169c21bb48f09b3ffffffff02c0769f0b000000001976a914a80543dc9a417df6cccd36d1c1d85b04a8a4f49f88ac961649000000000017a914bc64b2d79807cd3d72101c3298b89117d32097fb870247304402204dfe8a3b8d22d7ebf762067ea4696b660c6550c92121ee11d582887b4c66e84302200d2945733954ff9f5edc259181f25206fcda79b04f5d453f7f536755dd6bb39d012102506bc1dc099358e5137292f4efdd57e400f29ba5132aa5d12b18dac1c1f6aaba02483045022100d6d1d9fa05f40d215554a0ca15642aca73e4f3edf47f7fc8edc52f80289d9dd40220162a53822d0a6913c22b27ffe60543d7b8ec2ff7943ce6f15a56f874daa33c89012102506bc1dc099358e5137292f4efdd57e400f29ba5132aa5d12b18dac1c1f6aaba00000000";
       
       XCTAssertEqual(expected, signedResult.signedTx)

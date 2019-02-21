@@ -10,22 +10,9 @@ import Foundation
 import CoreBitcoin
 
 public final class Identity {
-  private static var _currentIdentity: Identity?
-  static let storage = StorageManager.storage
-
-  public static var currentIdentity: Identity? {
-    set(newIdentity) {
-      _currentIdentity = newIdentity
-    }
-    get {
-      if _currentIdentity == nil {
-        _currentIdentity = storage.tryLoadIdentity()
-      }
-      return _currentIdentity
-    }
-  }
 
   public var keystore: IdentityKeystore
+
   public var identifier: String {
     return keystore.identifier
   }
@@ -33,12 +20,19 @@ public final class Identity {
     return keystore.wallets
   }
 
+  public var bitcoinWallet : BasicWallet {
+    return keystore.wallets[1]
+  }
+
+  public var ethereumWallet : BasicWallet {
+    return keystore.wallets[0]
+  }
+
   init(metadata: WalletMeta, mnemonic: String, password: String) throws {
     keystore = try IdentityKeystore(metadata: metadata, mnemonic: mnemonic, password: password)
 
     _ = try deriveWallets(for: [.eth, .btc], mnemonic: mnemonic, password: password)
 
-    _ = Identity.storage.flushIdentity(keystore)
   }
 
   public init?(json: JSONObject) {
@@ -46,7 +40,6 @@ public final class Identity {
       return nil
     }
     self.keystore = keystore
-    self.keystore.wallets = Identity.storage.loadWalletByIDs(self.keystore.walletIds)
   }
 
   public func export(password: String) throws -> String {
@@ -56,17 +49,6 @@ public final class Identity {
     return try keystore.mnemonic(from: password)
   }
 
-  public func delete(password: String) throws -> Bool {
-    guard keystore.verify(password: password) else {
-      throw PasswordError.incorrect
-    }
-
-    if Identity.storage.cleanStorage() {
-      Identity.currentIdentity = nil
-      return true
-    }
-    return false
-  }
 
   public func deriveWallets(for chainTypes: [ChainType], password: String) throws -> [BasicWallet] {
     let mnemonic = try export(password: password)
@@ -80,13 +62,11 @@ public extension Identity {
     let mnemonic = MnemonicUtil.generateMnemonic()
 
     let identity = try Identity(metadata: metadata, mnemonic: mnemonic, password: password)
-    currentIdentity = identity
     return (mnemonic, identity)
   }
 
   static func recoverIdentity(metadata: WalletMeta, mnemonic: String, password: String) throws -> Identity {
     let identity = try Identity(metadata: metadata, mnemonic: mnemonic, password: password)
-    currentIdentity = identity
     return identity
   }
 }
@@ -98,21 +78,12 @@ extension Identity {
 
     keystore.wallets.append(wallet)
     keystore.walletIds.append(wallet.walletID)
-    if Identity.storage.flushWallet(wallet.keystore) && Identity.storage.flushIdentity(keystore) {
-      return wallet
-    }
 
-    throw GenericError.importFailed
+    return wallet
+
+//    throw GenericError.importFailed
   }
 
-  func removeWallet(_ wallet: BasicWallet) -> Bool {
-    if let index = keystore.walletIds.index(where: { return $0 == wallet.walletID }) {
-      keystore.wallets.remove(at: index)
-      keystore.walletIds.remove(at: index)
-      return Identity.storage.flushIdentity(keystore)
-    }
-    return false
-  }
 
   func importFromMnemonic(_ mnemonic: String, metadata: WalletMeta, encryptBy password: String, at path: String) throws -> BasicWallet {
     if path.isEmpty {
