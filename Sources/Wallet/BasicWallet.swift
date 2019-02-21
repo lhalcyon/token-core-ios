@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import CoreBitcoin
 
 public typealias WalletID = String
 
@@ -14,6 +15,27 @@ public class BasicWallet {
   public var walletID: WalletID
   public var keystore: Keystore
   public let chainType: ChainType?
+
+  /**
+ Import private key to generate wallet
+ */
+  static func importFromPrivateKey(_ privateKey: String, encryptedBy password: String, metadata: WalletMeta, accountName: String? = nil) throws -> BasicWallet {
+    let keystore: Keystore
+    switch metadata.chain! {
+    case .btc:
+      keystore = try BTCKeystore(password: password, wif: privateKey, metadata: metadata)
+    case .eth:
+      keystore = try ETHKeystore(password: password, privateKey: privateKey, metadata: metadata)
+    case .eos:
+      guard let accountName = accountName, !accountName.isEmpty else {
+        throw GenericError.paramError
+      }
+      keystore = try EOSLegacyKeystore(password: password, wif: privateKey, metadata: metadata, accountName: accountName)
+    }
+    let wallet = BasicWallet(keystore)
+    return wallet
+  }
+
 
   public init(json: JSONObject) throws {
     do {
@@ -106,10 +128,41 @@ public extension BasicWallet {
     } else if let wifKeystore = keystore as? WIFCrypto {
       return wifKeystore.decryptWIF(password)
     } else if let xprvKeystore = keystore as? XPrvCrypto {
+      if metadata.walletFrom == .mnemonic && metadata.chain == .btc {
+        // HD bitcoin wallet export wif
+        return try calcWif(password)
+      }
       return xprvKeystore.decryptXPrv(password)
     } else {
       throw GenericError.operationUnsupported
     }
+  }
+
+  fileprivate func calcWif(_ password:String) throws -> String {
+    // get wallet via mnemonic , then
+    let mnemonic: String = try self.exportMnemonic(password: password)
+    let btcNetwork = metadata.isMainnet ? BTCNetwork.mainnet() : BTCNetwork.testnet()
+
+    guard let btcMnemonic = BTCMnemonic(words: mnemonic.split(separator: " "), password: "", wordListType: .english),
+          let seedData = btcMnemonic.seed else {
+      throw MnemonicError.wordInvalid
+    }
+
+    let mnemonicPath = metadata.isMainnet ? BIP44.btcMainnet : BIP44.btcTestnet
+
+    guard let masterKeychain = BTCKeychain(seed: seedData, network: btcNetwork),
+          let accountKeychain = masterKeychain.derivedKeychain(withPath: mnemonicPath) else {
+      throw GenericError.unknownError
+    }
+    accountKeychain.network = btcNetwork
+    guard let _ = accountKeychain.extendedPrivateKey else {
+      throw GenericError.unknownError
+    }
+
+//    crypto = Crypto(password: password, privateKey: rootPrivateKey.tk_toHexString(), cacheDerivedKey: true)
+//    crypto.clearDerivedKey()
+    let indexKey = accountKeychain.derivedKeychain(withPath: "/0/0").key!
+    return indexKey.wifTestnet
   }
 
   func privateKeys(password: String) throws -> [KeyPair] {

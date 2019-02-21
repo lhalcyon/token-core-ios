@@ -33,6 +33,8 @@ struct SampleKey {
 
   static let mainBitcoinTestnetAddress = "myVftRaBb8Vy3upWaL8TueAhDE2QAsQy1h"
 
+  static let wif = "cNg8cr48yGmxR8At14syCLzJoTdVXyM5n7yYHVkq7hAJzejLzR9Q"
+
   static let walletMeta = WalletMeta(chain: ChainType.btc, from: WalletFrom.mnemonic, network: Network.testnet)
 
 }

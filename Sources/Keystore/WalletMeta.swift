@@ -11,7 +11,7 @@ import Foundation
 
 
 public struct WalletMeta {
-  static let key = "tokenCoreMeta"
+  static let key = "metadata"
 
   public var network: Network?
   public var chain: ChainType?
@@ -20,13 +20,10 @@ public struct WalletMeta {
   var segWit = SegWit.none
 
   let timestamp: Double
-  let version: String
-  var backup: [String] = []
 
   public init(from: WalletFrom) {
     self.walletFrom = from
     timestamp = WalletMeta.currentTime
-    version = WalletMeta.currentVersion
   }
 
   public init(chain: ChainType, from: WalletFrom?, network: Network? = .mainnet,segwit: SegWit = .none) {
@@ -34,7 +31,6 @@ public struct WalletMeta {
     self.chain = chain
     self.network = network
     timestamp = WalletMeta.currentTime
-    version = WalletMeta.currentVersion
     self.segWit = segwit
   }
 
@@ -58,7 +54,6 @@ public struct WalletMeta {
     }
 
     timestamp = WalletMeta.currentTime
-    version = WalletMeta.currentVersion
   }
 
   public init(json: JSONObject) throws {
@@ -72,12 +67,6 @@ public struct WalletMeta {
       self.timestamp = timestamp
     } else {
       timestamp = WalletMeta.currentTime
-    }
-
-    if let version = json["version"] as? String {
-      self.version = version
-    } else {
-      version = WalletMeta.currentVersion
     }
 
     if let chainStr = json["chainType"] as? String,
@@ -105,8 +94,7 @@ public struct WalletMeta {
   func toJSON() -> JSONObject {
     var json: JSONObject = [
       "from": walletFrom?.rawValue ?? "",
-      "timestamp": "\(timestamp)",
-      "version": version,
+      "timestamp": Int(timestamp),
     ]
     if chain != nil {
       json["chainType"] = chain!.rawValue
@@ -130,19 +118,6 @@ public struct WalletMeta {
       return network.isMainnet
     }
     return true
-  }
-
-  // swiftlint:disable force_cast
-  private static var currentVersion: String {
-    if let versionString = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String {
-      return
-        "iOS-"
-          + versionString
-          + "."
-          + (Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as! String)
-    }
-
-    return "none-loaded-bundle"
   }
 
   private static var currentTime: Double {

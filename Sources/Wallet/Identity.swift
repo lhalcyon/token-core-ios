@@ -170,24 +170,6 @@ extension Identity {
     return try append(keystore)
   }
 
-  /**
-   Import private key to generate wallet
-   */
-  func importFromPrivateKey(_ privateKey: String, encryptedBy password: String, metadata: WalletMeta, accountName: String? = nil) throws -> BasicWallet {
-    let keystore: Keystore
-    switch metadata.chain! {
-    case .btc:
-      keystore = try BTCKeystore(password: password, wif: privateKey, metadata: metadata)
-    case .eth:
-      keystore = try ETHKeystore(password: password, privateKey: privateKey, metadata: metadata)
-    case .eos:
-      guard let accountName = accountName, !accountName.isEmpty else {
-        throw GenericError.paramError
-      }
-      keystore = try EOSLegacyKeystore(password: password, wif: privateKey, metadata: metadata, accountName: accountName)
-    }
-    return try append(keystore)
-  }
 
   func findWalletByPrivateKey(_ privateKey: String, on chainType: ChainType, network: Network? = nil, segWit: SegWit = .none) throws -> BasicWallet? {
     if chainType == .eth {

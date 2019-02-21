@@ -28,13 +28,6 @@ public struct WalletManager {
     return try identity.importFromKeystore(keystore, encryptedBy: password, metadata: metadata)
   }
 
-  /**
-   Import private key to generate wallet
-   */
-  public static func importFromPrivateKey(_ privateKey: String, encryptedBy password: String, metadata: WalletMeta, accountName: String? = nil) throws -> BasicWallet {
-    let identity = try IdentityValidator().validate()
-    return try identity.importFromPrivateKey(privateKey, encryptedBy: password, metadata: metadata, accountName: accountName)
-  }
 
   public static func findWalletByPrivateKey(_ privateKey: String, on chainType: ChainType, network: Network? = nil, segWit: SegWit = .none) throws -> BasicWallet? {
     let identity = try IdentityValidator().validate()
