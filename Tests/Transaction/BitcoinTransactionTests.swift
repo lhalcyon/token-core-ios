@@ -18,19 +18,19 @@ class BitcoinTransactionTests: TestCase {
             let wallet: BasicWallet = identity.bitcoinWallet
             let outputs: [[String: Any]] = [
                 [
-                    "txHash": "2301b40a6f8d6de8b7f2dbea987748a8c02275ca209ad6c80426283e6260824c",
+                    "txHash": "b438a3bb883e3108acb20f9f598341523a6d06f01ed955e98cd5c8dfd47bb53e",
                     "vout": 0,
-                    "amount": "5000",
+                    "amount": "19878926",
                     "address": "ms9kSTDE9UPyCYN9j7nzcZyfLCCc6CK3Fx",
-                    "scriptPubKey": "a91480b7abac1f5c44d45c76fb2a43a0a2f062bd8cd887",
+                    "scriptPubKey": "76a9147f9ee0c3ecb167027680c975ba2d4e161430afa688ac",
                     "derivedPath": "0/0"
                 ],
                 [
-                    "txHash": "7d082237e2cfa5ebe5323cee85a645a4956d4c15eb110329115570d660bece6a",
+                    "txHash": "402829fc7f932834ee6c59c23d522755d922d29ab0dc85d15a068aabf606f507",
                     "vout": 0,
-                    "amount": "5000",
+                    "amount": "17628860",
                     "address": "ms9kSTDE9UPyCYN9j7nzcZyfLCCc6CK3Fx",
-                    "scriptPubKey": "a91480b7abac1f5c44d45c76fb2a43a0a2f062bd8cd887",
+                    "scriptPubKey": "76a9147f9ee0c3ecb167027680c975ba2d4e161430afa688ac",
                     "derivedPath": "0/0"
                 ]
             ]
