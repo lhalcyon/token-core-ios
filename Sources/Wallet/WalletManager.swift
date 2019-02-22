@@ -104,7 +104,8 @@ public struct WalletManager {
             password: String,
             outputs: [[String: Any]],
             changeIdx: Int,
-            isExternal: Bool = false
+            isExternal: Bool = false,
+            usdtHex:String? = nil
     ) throws -> TransactionSignedResult {
 
         let isTestnet = !wallet.metadata.isMainnet
@@ -149,7 +150,7 @@ public struct WalletManager {
         if segWit.isSegWit {
             return try signer.signSegWit()
         } else {
-            return try signer.sign()
+            return try signer.sign(usdtHex)
         }
     }
 
@@ -161,9 +162,11 @@ public struct WalletManager {
             password: String,
             outputs: [[String: Any]],
             changeIdx: Int,
-            isExternal: Bool = false
+            isExternal: Bool = false,
+            usdtHex:String? = nil,
+            threshold:Int64 = 546
     ) throws -> TransactionSignedResult {
-
+        return try btcSignTransaction(wallet: wallet, to: to, amount: threshold, fee: fee, password: password, outputs: outputs, changeIdx: changeIdx,isExternal: isExternal,usdtHex: usdtHex)
     }
 
     /// Allow BTC wallet to switch between legacy/SegWit.

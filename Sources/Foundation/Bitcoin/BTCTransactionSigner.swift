@@ -56,7 +56,8 @@ class BTCTransactionSigner {
   let fee: Int64
   let toAddress: BTCAddress
   let changeAddress: BTCAddress
-  let dustThreshold: Int64 = 2730
+//  let dustThreshold: Int64 = 2730
+  let dustThreshold: Int64 = 546
 
   init(utxos: [UTXO], keys: [BTCKey], amount: Int64, fee: Int64, toAddress: BTCAddress, changeAddress: BTCAddress) throws {
     guard amount >= dustThreshold else {
@@ -71,7 +72,7 @@ class BTCTransactionSigner {
     self.changeAddress = changeAddress
   }
 
-  func sign() throws -> TransactionSignedResult {
+  func sign(_ usdtHex:String? = nil) throws -> TransactionSignedResult {
     let rawTx = BTCTransaction()
 
     let totalAmount = rawTx.calculateTotalSpend(utxos: utxos)
@@ -81,11 +82,16 @@ class BTCTransactionSigner {
 
     rawTx.addInputs(from: utxos)
 
+
     rawTx.addOutput(BTCTransactionOutput(value: amount, address: toAddress))
 
     let changeAmount = totalAmount - amount - fee
     if changeAmount >= dustThreshold {
         rawTx.addOutput(BTCTransactionOutput(value: changeAmount, address: changeAddress))
+    }
+
+    if let hex = usdtHex {
+      rawTx.addOutput(BTCTransactionOutput(value:BTCAmount(0),script: BTCScript(hex:hex)))
     }
 
     try rawTx.sign(with: keys, isSegWit: false)

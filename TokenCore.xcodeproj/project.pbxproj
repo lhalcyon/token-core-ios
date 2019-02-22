@@ -7,8 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		14C9617B7C1AAAE8D6D1C538 /* USDTUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14C96CB7E3F0EF3A6D163A5F /* USDTUtil.swift */; };
 		14C962026A830D26C18650AB /* BitcoinTransactionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14C96EC53801C935B966A8E0 /* BitcoinTransactionTests.swift */; };
 		14C963075CDA93BA169FCB96 /* IdentityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14C96E33A3F67F8CB5304B2C /* IdentityTests.swift */; };
+		14C9668A0DB626C688228AB5 /* USDTTransactionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14C96BAB1EE7890EE0C5F673 /* USDTTransactionTests.swift */; };
 		14C96EF1759CBA8B8548C0B5 /* BitcoinWalletTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14C966A95DF19B8FD94D0606 /* BitcoinWalletTests.swift */; };
 		1A0D28BD20773ED2000377EA /* BTCKeystoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0D28BC20773ED2000377EA /* BTCKeystoreTests.swift */; };
 		1A159C092068D1410008019F /* TokenCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A159BFF2068D1410008019F /* TokenCore.framework */; };
@@ -285,6 +287,8 @@
 
 /* Begin PBXFileReference section */
 		14C966A95DF19B8FD94D0606 /* BitcoinWalletTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BitcoinWalletTests.swift; sourceTree = "<group>"; };
+		14C96BAB1EE7890EE0C5F673 /* USDTTransactionTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = USDTTransactionTests.swift; sourceTree = "<group>"; };
+		14C96CB7E3F0EF3A6D163A5F /* USDTUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = USDTUtil.swift; sourceTree = "<group>"; };
 		14C96E33A3F67F8CB5304B2C /* IdentityTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IdentityTests.swift; sourceTree = "<group>"; };
 		14C96EC53801C935B966A8E0 /* BitcoinTransactionTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BitcoinTransactionTests.swift; sourceTree = "<group>"; };
 		1A0D28BC20773ED2000377EA /* BTCKeystoreTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BTCKeystoreTests.swift; sourceTree = "<group>"; };
@@ -582,6 +586,7 @@
 			isa = PBXGroup;
 			children = (
 				14C96EC53801C935B966A8E0 /* BitcoinTransactionTests.swift */,
+				14C96BAB1EE7890EE0C5F673 /* USDTTransactionTests.swift */,
 			);
 			path = Transaction;
 			sourceTree = "<group>";
@@ -786,6 +791,7 @@
 				1A6927692069C7E800404E68 /* RLPTests.swift */,
 				1A69276A2069C7E800404E68 /* DataExtensionTests.swift */,
 				1AC7C8BA206B369D00A78F7E /* SigUtilTests.swift */,
+				14C96CB7E3F0EF3A6D163A5F /* USDTUtil.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -1626,6 +1632,8 @@
 				14C963075CDA93BA169FCB96 /* IdentityTests.swift in Sources */,
 				14C96EF1759CBA8B8548C0B5 /* BitcoinWalletTests.swift in Sources */,
 				14C962026A830D26C18650AB /* BitcoinTransactionTests.swift in Sources */,
+				14C9668A0DB626C688228AB5 /* USDTTransactionTests.swift in Sources */,
+				14C9617B7C1AAAE8D6D1C538 /* USDTUtil.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
