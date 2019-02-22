@@ -163,10 +163,9 @@ public struct WalletManager {
             outputs: [[String: Any]],
             changeIdx: Int,
             isExternal: Bool = false,
-            usdtHex:String? = nil,
-            threshold:Int64 = 546
+            usdtHex:String? = nil
     ) throws -> TransactionSignedResult {
-        return try btcSignTransaction(wallet: wallet, to: to, amount: threshold, fee: fee, password: password, outputs: outputs, changeIdx: changeIdx,isExternal: isExternal,usdtHex: usdtHex)
+        return try btcSignTransaction(wallet: wallet, to: to, amount: amount, fee: fee, password: password, outputs: outputs, changeIdx: changeIdx,isExternal: isExternal,usdtHex: usdtHex)
     }
 
     /// Allow BTC wallet to switch between legacy/SegWit.
