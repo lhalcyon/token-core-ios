@@ -106,11 +106,9 @@ public struct WalletManager {
     outputs: [[String: Any]],
     changeIdx: Int,
     isTestnet: Bool,
-    segWit: SegWit
+    segWit: SegWit,
+    isExternal:Bool = false
   ) throws -> TransactionSignedResult {
-//    guard let wallet = Identity.currentIdentity?.findWalletByWalletID(walletID) else {
-//      throw GenericError.walletNotFound
-//    }
 
     guard let toAddress = BTCAddress(string: to) else {
       throw AddressError.invalid
@@ -132,7 +130,8 @@ public struct WalletManager {
       privateKeys = Array(repeating: changeKey, count: outputs.count)
     } else {
       let extendedKey = try wallet.privateKey(password: password)
-      guard let keychain = BTCKeychain(extendedKey: extendedKey), let key = keychain.changeKey(at: UInt32(changeIdx)) else {
+      guard let keychain = BTCKeychain(extendedKey: extendedKey),
+            let key = isExternal ? keychain.externalKey(at: UInt32(changeIdx)) :keychain.changeKey(at: UInt32(changeIdx)) else {
           throw GenericError.unknownError
       }
       changeKey = key

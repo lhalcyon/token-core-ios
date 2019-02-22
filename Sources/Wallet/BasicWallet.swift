@@ -118,7 +118,7 @@ public extension BasicWallet {
     return ""
   }
 
-  public func privateKey(password: String) throws -> String {
+  public func privateKey(password: String,wif:Bool = false) throws -> String {
     guard keystore.verify(password: password) else {
       throw PasswordError.incorrect
     }
@@ -128,7 +128,7 @@ public extension BasicWallet {
     } else if let wifKeystore = keystore as? WIFCrypto {
       return wifKeystore.decryptWIF(password)
     } else if let xprvKeystore = keystore as? XPrvCrypto {
-      if metadata.walletFrom == .mnemonic && metadata.chain == .btc {
+      if wif {
         // HD bitcoin wallet export wif
         return try calcWif(password)
       }
