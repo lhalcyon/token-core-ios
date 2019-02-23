@@ -15,7 +15,7 @@ Pod::Spec.new do |s|
   #  summary should be tweet-length, and the description more in depth.
   #
 
-  s.name         = "TokenRealmCore"
+  s.name         = "TokenCore"
   s.version      = "0.0.1beta"
   s.summary      = "Blockchain Library for TokenRealm."
 
@@ -59,7 +59,7 @@ Pod::Spec.new do |s|
   s.author             = { "ceyx" => "lh_halcyondays@163.com" }
   # Or just: s.author    = "ceyx"
   # s.authors            = { "ceyx" => "lh_halcyondays@163.com" }
-  # s.social_media_url   = "http://twitter.com/ceyx"
+  s.social_media_url   = "https://lhalcyon.com"
 
   # ――― Platform Specifics ――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
   #
