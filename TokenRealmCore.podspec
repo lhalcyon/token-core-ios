@@ -15,7 +15,8 @@ Pod::Spec.new do |s|
   #  summary should be tweet-length, and the description more in depth.
   #
 
-  s.name         = "TokenCore"
+  s.name         = "TokenRealmCore"
+  s.module_name  = "TokenCore"
   s.version      = "0.0.1beta"
   s.summary      = "Blockchain Library for TokenRealm."
 
@@ -145,7 +146,7 @@ Pod::Spec.new do |s|
   ]
   s.preserve_paths = "Modules"
   s.pod_target_xcconfig = {
-    "SWIFT_INCLUDE_PATHS" => "$(SRCROOT)/TokenCore/Modules",
+    "SWIFT_INCLUDE_PATHS" => "$(SRCROOT)/TokenRealmCore/Modules",
     "OTHER_LDFLAGS" => "-lObjC",
     "SWIFT_OPTIMIZATION_LEVEL" => "-Owholemodule"
   }
