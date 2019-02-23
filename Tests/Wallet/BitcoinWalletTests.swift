@@ -72,7 +72,7 @@ class BitcoinWalletTests: TestCase {
         do {
             let identity = try Identity.recoverIdentity(metadata: SampleKey.walletMeta, mnemonic: SampleKey.mnemonic, password: SampleKey.password)
             let wallet: BasicWallet = identity.bitcoinWallet
-            let privateKey: String = try wallet.privateKey(password: SampleKey.password,wif: true)
+            let privateKey: String = try wallet.privateKey(password: SampleKey.password,isHDWalletExportWif: true)
             print("privateKey:\(privateKey)")
             XCTAssertEqual(privateKey, SampleKey.wif)
         } catch {

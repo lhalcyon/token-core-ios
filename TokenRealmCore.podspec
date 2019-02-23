@@ -138,10 +138,6 @@ Pod::Spec.new do |s|
   # s.xcconfig = { "HEADER_SEARCH_PATHS" => "$(SDKROOT)/usr/include/libxml2" }
   # s.dependency "JSONKit", "~> 1.4"
 
-  s.dependency "CryptoSwift", "0.9.0"
-  s.dependency "BigInt", "3.0.0"
-  s.dependency "GRKOpenSSLFramework"
-
   s.swift_version = "4.0"
   s.preserve_paths = "Modules"
   s.vendored_frameworks = [
@@ -154,4 +150,7 @@ Pod::Spec.new do |s|
     "SWIFT_OPTIMIZATION_LEVEL" => "-Owholemodule"
   }
 
+  s.dependency "CryptoSwift", "0.9.0"
+  s.dependency "BigInt", "3.0.0"
+  s.dependency "GRKOpenSSLFramework"
 end

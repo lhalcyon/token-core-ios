@@ -217,5 +217,30 @@ public struct WalletManager {
         return wallet
     }
 
+    static func calcWif(_ password:String,wallet:BasicWallet) throws -> String {
+        // get wallet via mnemonic , then
+        let mnemonic: String = try wallet.exportMnemonic(password: password)
+        let btcNetwork = wallet.metadata.isMainnet ? BTCNetwork.mainnet() : BTCNetwork.testnet()
 
+        guard let btcMnemonic = BTCMnemonic(words: mnemonic.split(separator: " "), password: "", wordListType: .english),
+              let seedData = btcMnemonic.seed else {
+            throw MnemonicError.wordInvalid
+        }
+
+        let mnemonicPath = wallet.metadata.isMainnet ? BIP44.btcMainnet : BIP44.btcTestnet
+
+        guard let masterKeychain = BTCKeychain(seed: seedData, network: btcNetwork),
+              let accountKeychain = masterKeychain.derivedKeychain(withPath: mnemonicPath) else {
+            throw GenericError.unknownError
+        }
+        accountKeychain.network = btcNetwork
+        guard let _ = accountKeychain.extendedPrivateKey else {
+            throw GenericError.unknownError
+        }
+
+//    crypto = Crypto(password: password, privateKey: rootPrivateKey.tk_toHexString(), cacheDerivedKey: true)
+//    crypto.clearDerivedKey()
+        let indexKey = accountKeychain.derivedKeychain(withPath: "/0/0").key!
+        return indexKey.wifTestnet
+    }
 }

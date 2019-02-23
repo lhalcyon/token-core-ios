@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import CoreBitcoin
 
 public typealias WalletID = String
 
@@ -118,7 +117,7 @@ public extension BasicWallet {
     return ""
   }
 
-  public func privateKey(password: String,wif:Bool = false) throws -> String {
+  public func privateKey(password: String, isHDWalletExportWif:Bool = false) throws -> String {
     guard keystore.verify(password: password) else {
       throw PasswordError.incorrect
     }
@@ -128,9 +127,9 @@ public extension BasicWallet {
     } else if let wifKeystore = keystore as? WIFCrypto {
       return wifKeystore.decryptWIF(password)
     } else if let xprvKeystore = keystore as? XPrvCrypto {
-      if wif {
+      if isHDWalletExportWif {
         // HD bitcoin wallet export wif
-        return try calcWif(password)
+        return try WalletManager.calcWif(password,wallet: self)
       }
       return xprvKeystore.decryptXPrv(password)
     } else {
@@ -138,32 +137,6 @@ public extension BasicWallet {
     }
   }
 
-  fileprivate func calcWif(_ password:String) throws -> String {
-    // get wallet via mnemonic , then
-    let mnemonic: String = try self.exportMnemonic(password: password)
-    let btcNetwork = metadata.isMainnet ? BTCNetwork.mainnet() : BTCNetwork.testnet()
-
-    guard let btcMnemonic = BTCMnemonic(words: mnemonic.split(separator: " "), password: "", wordListType: .english),
-          let seedData = btcMnemonic.seed else {
-      throw MnemonicError.wordInvalid
-    }
-
-    let mnemonicPath = metadata.isMainnet ? BIP44.btcMainnet : BIP44.btcTestnet
-
-    guard let masterKeychain = BTCKeychain(seed: seedData, network: btcNetwork),
-          let accountKeychain = masterKeychain.derivedKeychain(withPath: mnemonicPath) else {
-      throw GenericError.unknownError
-    }
-    accountKeychain.network = btcNetwork
-    guard let _ = accountKeychain.extendedPrivateKey else {
-      throw GenericError.unknownError
-    }
-
-//    crypto = Crypto(password: password, privateKey: rootPrivateKey.tk_toHexString(), cacheDerivedKey: true)
-//    crypto.clearDerivedKey()
-    let indexKey = accountKeychain.derivedKeychain(withPath: "/0/0").key!
-    return indexKey.wifTestnet
-  }
 
   func privateKeys(password: String) throws -> [KeyPair] {
     guard keystore.verify(password: password) else {
