@@ -58,8 +58,8 @@ public final class Identity {
 
 // MARK: Factory And Storage
 public extension Identity {
-  static func createIdentity(password: String, metadata: WalletMeta) throws -> (String, Identity) {
-    let mnemonic = MnemonicUtil.generateMnemonic()
+  static func createIdentity(password: String, metadata: WalletMeta,words:Words = Words.twelve) throws -> (String, Identity) {
+    let mnemonic = MnemonicUtil.generateMnemonic(words: words)
 
     let identity = try Identity(metadata: metadata, mnemonic: mnemonic, password: password)
     return (mnemonic, identity)

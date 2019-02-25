@@ -17,7 +17,7 @@ Pod::Spec.new do |s|
 
   s.name         = "TokenRealmCore"
   s.module_name  = "TokenCore"
-  s.version      = "0.0.2"
+  s.version      = "0.0.3"
   s.summary      = "Blockchain Library for TokenRealm."
 
   # This description is used to generate tags and improve search results.

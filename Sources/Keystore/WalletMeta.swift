@@ -11,15 +11,16 @@ import Foundation
 
 
 public struct WalletMeta {
-  static let key = "metadata"
+  public static let key = "metadata"
 
   public var network: Network?
   public var chain: ChainType?
   public let walletFrom: WalletFrom?
   
-  var segWit = SegWit.none
+  public var segWit = SegWit.none
 
   let timestamp: Double
+
 
   public init(from: WalletFrom) {
     self.walletFrom = from
@@ -107,6 +108,11 @@ public struct WalletMeta {
     json["segWit"] = segWit.rawValue
     
     return json
+  }
+  
+  public func toJSONString() -> String {
+      let data = try! JSONSerialization.data(withJSONObject: toJSON(), options: [])
+      return String(data: data, encoding: .utf8)!
   }
 
   var isSegWit: Bool {

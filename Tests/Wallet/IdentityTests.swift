@@ -63,4 +63,14 @@ class IdentityTests: TestCase {
             XCTFail("export mnemonic fail!")
         }
     }
+
+    func testKeystoreDump(){
+        do {
+            let identity = try Identity.recoverIdentity(metadata: SampleKey.walletMeta, mnemonic: SampleKey.mnemonic, password: SampleKey.password)
+            let str = identity.keystore.dump()
+            print(str)
+        } catch {
+            XCTFail("export mnemonic fail!")
+        }
+    }
 }
