@@ -28,7 +28,7 @@ class BitcoinTransactionTests: TestCase {
                 [
                     "txHash": "402829fc7f932834ee6c59c23d522755d922d29ab0dc85d15a068aabf606f507",
                     "vout": 0,
-                    "amount": "17628860",
+                    "amount": 17628860,
                     "address": "ms9kSTDE9UPyCYN9j7nzcZyfLCCc6CK3Fx",
                     "scriptPubKey": "76a9147f9ee0c3ecb167027680c975ba2d4e161430afa688ac",
                     "derivedPath": "0/0"

@@ -18,7 +18,7 @@ public class BasicWallet {
   /**
  Import private key to generate wallet
  */
-  static func importFromPrivateKey(_ privateKey: String, encryptedBy password: String, metadata: WalletMeta, accountName: String? = nil) throws -> BasicWallet {
+  public static func importFromPrivateKey(_ privateKey: String, encryptedBy password: String, metadata: WalletMeta, accountName: String? = nil) throws -> BasicWallet {
     let keystore: Keystore
     switch metadata.chain! {
     case .btc:
