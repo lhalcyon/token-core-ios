@@ -29,13 +29,13 @@ public struct IdentityKeystore {
     return toJSONString()
   }
 
-  func verify(password: String) -> Bool {
+  public func verify(password: String) -> Bool {
     let decryptedMac = crypto.macFrom(password: password)
     let mac = crypto.mac
     return decryptedMac.lowercased() == mac.lowercased()
   }
 
-  func mnemonic(from password: String) throws -> String {
+  public func mnemonic(from password: String) throws -> String {
     return String(data: encMnemonic.decrypt(crypto: crypto, password: password).tk_dataFromHexString()!, encoding: .utf8)!
   }
 }

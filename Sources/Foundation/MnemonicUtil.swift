@@ -28,12 +28,12 @@ extension Words {
   
 }
 
-struct MnemonicUtil {
+public struct MnemonicUtil {
   static func btcMnemonicFromEngWords(_ words: String) -> BTCMnemonic {
     return BTCMnemonic(words: words.split(separator: " "), password: "", wordListType: BTCMnemonicWordListType.english)!
   }
 
-  static func generateMnemonic(words:Words = Words.twelve) -> String {
+  public static func generateMnemonic(words:Words = Words.twelve) -> String {
     let entropy = Data.tk_random(of: words.byteLength())
     let words = BTCMnemonic(entropy: entropy, password: "", wordListType: .english).words as! [String]
     return words.joined(separator: " ")
